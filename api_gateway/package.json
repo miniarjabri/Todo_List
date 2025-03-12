@@ -1,0 +1,17 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "Passerelle API pour Todo-List",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "http-proxy-middleware": "^3.0.3",
+    "jsonwebtoken": "latest",
+    "mongoose": "latest"
+  }
+}
