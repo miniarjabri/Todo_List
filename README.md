@@ -1,83 +1,105 @@
-# 📌 Application To-Do-List
+# 📝 To-Do List - Architecture Microservices
 
-Une simple application de gestion de tâches utilisant la stack **MERN** avec **Google OAuth2.0**.  
-Les utilisateurs peuvent se connecter avec leur compte Google. La liste de tâches est stockée dans **MongoDB**.  
-Ils peuvent **ajouter, modifier et supprimer** leurs tâches.
-
-## 🛠️ Technologies utilisées  
-- **Node.js**
-- **Express.js**
-- **MongoDB / Mongoose**
-- **Authentification : Passport.js / Google OAuth2**
-- **Interface utilisateur : Bootstrap / CSS3**
+Ce projet est une **application To-Do List** développée en **architecture microservices**. Il comprend plusieurs services indépendants interconnectés via un **API Gateway**.
 
 ---
 
-## 📂 Installation et Exécution  
-### 1️⃣ **Installation des dépendances**  
-Exécutez la commande suivante dans le terminal :  
+## 📌 **Architecture du Projet**
+Le projet est composé des services suivants :
+
+- **Frontend (React)** : Interface utilisateur de l'application  
+- **API Gateway (Express.js)** : Router les requêtes vers les services correspondants  
+- **Auth Service (Express.js + Passport.js + Google OAuth2)** : Gestion de l’authentification  
+- **Task Service (Express.js + MongoDB)** : CRUD des tâches  
+
+Chaque service fonctionne de manière indépendante et peut être **conteneurisé avec Docker**.
+
+---
+
+## 🚀 **Installation & Exécution**
+
+### **1️⃣ Cloner le dépôt**
 ```sh
-npm install
+git clone <lien-du-repo-github>
+cd micro-todo-list
 ```
 
-### 2️⃣ **Démarrer le serveur**  
-Mode développement :  
+### **2️⃣ Lancer les services avec Docker**
 ```sh
-npm run dev
+docker-compose up --build
 ```
-Mode normal :  
+ou bien
 ```sh
-npm run server
+cd frontend
+npm start 
+```
+... de meme pour chaque service
+> Assurez-vous que **Docker** et **Docker Compose** sont installés sur votre machine.
+
+### **3️⃣ Accéder à l’application**
+- **Frontend (React)** : [http://localhost:3002](http://localhost:3002)
+- **API Gateway** : [http://localhost:5000](http://localhost:5000)
+- **Auth Service** : [http://localhost:4000](http://localhost:4000)
+- **Task Service** : [http://localhost:6000](http://localhost:6000)
+
+---
+
+## ⚙️ **Configuration des Variables d’Environnement**
+Avant de lancer le projet, créez un fichier **.env** dans chaque service :
+
+### **Auth Service (`auth_service/.env`)**
+Google Cloud Platform
+```env
+GOOGLE_CLIENT_ID=685484338448-bg8a4fmm0dtvlalifosqtdqcg1hekkhk.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_CALLBACK_URL=http://localhost:4000/auth/google/callback
+```
+MangoDB
+```env
+MONGO_USERNAME=TER
+MONGO_PASSWORD=TERoauth
+MONGO_CLUSTER=cluster0.p3e6b.mongodb.net
+MONGO_DB_NAME=todolist
+```
+### **Task Service (`task_service/.env`)**
+```env
+MONGO_URI=mongodb://mongo:27017/todo
+PORT=6000
 ```
 
-📌 **L'application est accessible sur :**  
-🔗 **http://localhost:5000/auth/login**
+### **API Gateway (`api_gateway/.env`)**
+```env
+PORT=5000
+AUTH_SERVICE_URL=http://auth_service:4000
+TASK_SERVICE_URL=http://task_service:6000
+```
+
+### **Frontend (`frontend/.env`)**
+```env
+REACT_APP_API_URL=http://localhost:5000
+```
 
 ---
 
-## 🔑 **Authentification - Google OAuth**
-- Ce projet utilise **Google OAuth 2.0** pour l'authentification.
-- Les identifiants sont **déjà configurés** dans `config/keys.js`, aucune configuration supplémentaire n'est nécessaire.
-- 📩 **Vous avez tous reçu une invitation pour accéder au projet sur Google Cloud Platform**.
+## 📌 **Endpoints des Services**
+### **Auth Service**
+- `GET /auth/google` → Redirige vers Google OAuth  
+- `GET /auth/google/callback` → Callback après login  
+- `GET /auth/user` → Retourne les infos de l’utilisateur  
+- `GET /auth/logout` → Déconnecte l’utilisateur  
 
-![image](https://github.com/user-attachments/assets/5fa61976-9c33-45aa-9f87-352c816ec16e)
-
----
-
-## 🛢️ **Base de données - MongoDB Atlas**
-L'application est connectée à **MongoDB Atlas**, où toutes les données sont stockées.
-
-### 📡 **Accéder à la base de données**  
-Vous pouvez consulter la base de données et les collections via **MongoDB Atlas** :
-- Rendez-vous sur **[MongoDB Atlas](https://cloud.mongodb.com/)**
-- Connectez-vous et accédez au **Cluster0**
-- Cliquez sur **Browse Collections** pour afficher les données.
-
-📌 **Vous avez tous reçu une invitation pour accéder à la base de données.**  
-La collection **"todolist"** est située dans **Cluster0 → Collection → todolist**.
-
-- username: TER
-- password: TERoauth 
-
-![image](https://github.com/user-attachments/assets/d34ca129-6686-4891-b134-3a90c6d24c49)
+### **Task Service**
+- `GET /tasks` → Récupérer toutes les tâches  
+- `POST /tasks` → Ajouter une nouvelle tâche  
+- `PUT /tasks/:id` → Modifier une tâche  
+- `DELETE /tasks/:id` → Supprimer une tâche  
 
 ---
 
-## 🔐 **⚠️ Sécurité & Accès**
-- **Ne partagez pas l'URI MongoDB en dehors de l'équipe.**
-- Pour ajouter un membre à la base de données :
-  - Rendez-vous sur **MongoDB Atlas → Database Access → Add New User**.
-- Seuls les membres de l'équipe doivent avoir accès aux ressources.
+## 🛠 **Technologies Utilisées**
+- **Backend** : Node.js, Express.js, MongoDB, Passport.js  
+- **Frontend** : React.js  
+- **Auth** : Google OAuth2  
+- **Infrastructure** : Docker, Docker Compose  
 
 ---
-
----
-
-## 🎥 **Vidéo Explicative**
-
-Vous pouvez consulter la vidéo explicative ici :
-
-[![Vidéo Explicative](https://github.com/user-attachments/assets/placeholder.jpg)](vid1.mp4)
-
----
-
