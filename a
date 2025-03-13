@@ -1,0 +1,9 @@
+1- ouvrur dockzer
+2- docker-compose up --build
+Le service API Gateway écoute sur le port 5000.
+Le service auth-service écoute sur le port 5001.
+Le service task-service écoute sur le port 5002.
+MongoDB est accessible sur le port 27017.lo
+
+docker-compose down
+docker-compose up --build
